@@ -2,6 +2,8 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
 const router = express.Router();
+const jwt = require('jsonwebtoken');
+
 
 // User registration route
 router.post('/register', async (req, res) => {
@@ -10,8 +12,17 @@ router.post('/register', async (req, res) => {
     try {
         // Check if the username already exists
         const existingUser = await User.findOne({ username });
+
+        if (!validator.isEmail(email)) {
+            return res.status(400).json({ error: 'Invalid email address' });
+        }
+
         if (existingUser) {
             return res.status(400).json({ error: 'Username already exists' });
+        }
+        const existingEmail = await User.findOne({email})
+        if(existingEmail){
+            return res.status(400).json({error: 'E-mail already in use'})
         }
 
         // Create a new user instance
@@ -42,6 +53,24 @@ router.post('/login', async (req, res) => {
         res.status(200).json({ token });
     } catch (err) {
         res.status(500).json({ error: 'Login failed', details: err.message });
+    }
+});
+
+// Route to delete a user by ID
+router.delete('/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        // Find and delete the user
+        const deletedUser = await User.findByIdAndDelete(id);
+
+        if (!deletedUser) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        res.status(200).json({ message: 'User deleted successfully', user: deletedUser });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to delete user', details: error.message });
     }
 });
 

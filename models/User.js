@@ -5,7 +5,18 @@ const bcrypt = require('bcrypt');
 const userSchema = new mongoose.Schema({
     username: { type: String, required: true, unique: true }, // Unique username
     password: { type: String, required: true }, // Encrypted password
-    email: { type: String, required: false }, // Optional email
+    email: {
+        type: String,
+        required: false,
+        unique: true, 
+        validate: {
+            validator: function (email) {
+                // Regular expression to validate email format
+                return /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email);
+            },
+            message: 'Invalid email format'
+        }
+    },
 });
 
 // Hash the password before saving

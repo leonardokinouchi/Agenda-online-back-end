@@ -1,16 +1,15 @@
 // Importing dependencies
 const express = require('express')
 const mongoose = require('mongoose')
-require('dotenv').config();
 const cors = require('cors')
-
 const userRoutes = require('./routes/userRoute');
 const taskRoutes = require('./routes/tasksRoute');
 
+require('dotenv').config();
 
 // Creating the Express app
 const app = express();
-
+//database uri
 const uri = `mongodb+srv://${process.env.DB_LOGIN}:${process.env.DB_SENHA}@cluster0.s0usx.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 //Conexão com o banco de dados

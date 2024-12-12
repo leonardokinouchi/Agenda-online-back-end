@@ -7,6 +7,8 @@ const taskSchema = new mongoose.Schema({
     dueDate: { type: Date, required: false }, // Optional due date
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, // Reference to the user
     completed: { type: Boolean, default: false }, // Task completion status
+}, {
+    timestamps: true // Automatically add createdAt and updatedAt fields
 });
 
 // Create the model
