@@ -3,13 +3,21 @@ const bcrypt = require('bcrypt');
 const User = require('../models/User');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
+const validator = require('validator');
+
 
 
 // User registration route
 router.post('/register', async (req, res) => {
     const { username, password, email } = req.body;
 
+
     try {
+        console.log('Request body:', req.body);
+        // Verifica se todos os campos foram enviados
+        if (!username || !email || !password) {
+            return res.status(400).json({ error: 'All fields are required' });
+        }
         // Check if the username already exists
         const existingUser = await User.findOne({ username });
 
