@@ -38,7 +38,9 @@ app.use('/api/tasks', taskRoutes); // Task-related routes
 
 
 // Routes
-
+app.get('/', (req, res) => {
+  res.status(200).send('Backend funcionando! 🚀');
+});
 
 // Server setup
 const PORT = process.env.PORT || 5000;
